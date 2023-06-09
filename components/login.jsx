@@ -1,48 +1,74 @@
 import {Button,TextInput} from 'react-native-paper'
-import { StyleSheet, Text, View, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import React from "react";
+import axios from 'axios';
+
+
 
 
 
 
 
 export default function Login(){
-    const [errormessage, setErrorMessage] = useState('');
-
+    
+  const [errormessage, setErrorMessage] = useState('');
+  const [message, setMessage] = useState(''); 
+   
 
 const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-    username: '',
-    password:''
+    usuario: '',
+    contrasena:''
     }
   });
 
+  const onSubmit = data => console.log(data)
 
-const onSubmit = data =>{
-  const {password,username}=data
-  let uFind = user.find(user => user.username == username && user.password == password);
-  if (uFind != undefined){
-      const {name, username} = uFind
-      setErrorMessage('')
-      navigation.navigate('CarScreen',{name:name,username:username})
-  }
-  else{
-    setErrorMessage('Usuario y/o contraseña inválido (s)')
-  }
+ /* const login = async(data)=>{
+    
+    const res = await api.get(`/usuarios/${data.usuario}`,{
+      ...data
+    })
 
-}
+    
+    console.log(res.data)
+  }*/
+  
+  const onSearch = async(data) => {
+
+
+    try { const response = await axios.get(`http://127.0.0.1:3000/api/usuarios/${data.usuario}`); console.log(response.data)
+    if (response.data.usuario === data.usuario && response.data.contrasena === data.contrasena){ // Encuentra el usuario 
+     console.log("conectado")
+    
+      setErrorMessage(false); 
+      setMessage(''); } 
+    else{ 
+      setErrorMessage(true); 
+      setMessage(console.log("Usuario no encontrado")); 
+      setTimeout(()=>{ 
+        setMessage(''); 
+      },2000) 
+      
+      
+    } } catch (error) { console.log(error) 
+      alert(error) } 
+    finally{ 
+      //setLoading(false); 
+    } };
+  
 
     return(
-    <View>
+    <View style={styles.container} >
     <Text style={{ marginBottom: 10,fontSize:25,fontWeight:'bold' }}>Inicio de Sesión</Text>
-    <Text style={{color:'red'}}>{errormessage}</Text>
+    <Text style={{color:'red'}}>{setErrorMessage}</Text>
 
 
 
 
-           {/*Name */}
+           {/*usuario */}
       <Controller
       control={control}
       rules={{
@@ -60,14 +86,14 @@ const onSubmit = data =>{
           
         />
       )}
-      name="username"
+      name="usuario"
     />
-    {errors.username?.type==='required' && <Text>Este Campo es Obligatorio</Text>}
-    {errors.username?.type ==='pattern' && <Text>Escriba un Nombre solo con Letras y Espacios</Text>}
+    {errors.usuario?.type==='required' && <Text>Este Campo es Obligatorio</Text>}
+    {errors.usuario?.type ==='pattern' && <Text>Escriba un Nombre solo con Letras y Espacios</Text>}
 
 
     
-      {/*Password */}
+      {/*contrasena */}
       <Controller
       control={control}
       rules={{
@@ -76,7 +102,7 @@ const onSubmit = data =>{
       }}
       render={({ field: { onChange, onBlur, value } }) => (
         <TextInput
-          placeholder="Password"
+          placeholder="Contraseña"
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
@@ -85,10 +111,10 @@ const onSubmit = data =>{
           left={<TextInput.Icon icon="key" />}
         />
       )}
-      name="password"
+      name="contrasena"
     />
-    {errors.password?.type==="required" && <Text>Este Campo es Obligatorio</Text>}
-    {errors.password?.type==="pattern" && <Text>El Password Debe contener  números y letras</Text>}
+    {errors.contrasena?.type==="required" && <Text>Este Campo es Obligatorio</Text>}
+    {errors.contrasena?.type==="pattern" && <Text>El Password Debe contener  números y letras</Text>}
 
 
 
@@ -97,7 +123,7 @@ const onSubmit = data =>{
       mode="contained" 
       buttonColor='#B3AE4F'
       textColor='white'
-      onPress={handleSubmit(onSubmit)}
+      onPress={handleSubmit(onSearch)}
       style={{marginTop:10,width:250}}
       >
       Ingresar
@@ -108,3 +134,12 @@ const onSubmit = data =>{
   </View>
     )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

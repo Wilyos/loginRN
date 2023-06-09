@@ -14,7 +14,6 @@ export default function App() {
           initialRouteName='HomeTabs'>
           <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ title: 'Renta de Autos' }} />
           
-  
         </Stack.Navigator>
       </NavigationContainer>
   );
