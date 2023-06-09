@@ -42,12 +42,12 @@ export default function RecoverPass(){
     
     
         
-          {/*contrasena */}
+          {/*palabrareservada */}
           <Controller
           control={control}
           rules={{
            required: true,
-           pattern:/(?=.*\d)(?=.*[A-Za-zÁÉÍÓÚáéíóúñÑ])[A-Za-zÁÉÍÓÚáéíóúñÑ0-9]+/g
+           pattern:/(?=.*\d)(?=.*[A-Za-zÁÉÍÓÚáéíóúñÑ])/g
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -60,11 +60,10 @@ export default function RecoverPass(){
               left={<TextInput.Icon icon="key" />}
             />
           )}
-          name="contrasena"
+          name="palabrareservada"
         />
-        {errors.contrasena?.type==="required" && <Text>Este Campo es Obligatorio</Text>}
-        {errors.contrasena?.type==="pattern" && <Text>El Password Debe contener  números y letras</Text>}
-    
+        {errors.palabrareservada?.type==="required" && <Text>Este Campo es Obligatorio</Text>}
+        
     
     
         <Button 
@@ -75,11 +74,11 @@ export default function RecoverPass(){
           onPress={handleSubmit(onSearch)}
           style={{marginTop:10,width:250}}
           >
-          Ingresar
+          Cambiar Contraseña
         </Button>
     
-        <Button style={{marginTop:10,width:250}} onPress={()=>{navigation.navigate('Registrar')}} buttonColor='#66654B' textColor='white' icon="car-arrow-right">Registrar</Button>
-        <Button style={{marginTop:10,width:250}} onPress={()=>{navigation.navigate('Registrar')}} buttonColor='#66654B' textColor='white' icon="help">Recuperar Contraseña</Button>
+        <Button style={{marginTop:10,width:250}} onPress={()=>{navigation.navigate('Registrar')}} buttonColor='#66654B' textColor='white' icon="car-arrow-right">Iniciar Sesion</Button>
+       
       </View>
         )
 
